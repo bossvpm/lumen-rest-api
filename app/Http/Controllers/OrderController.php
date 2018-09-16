@@ -72,6 +72,22 @@ class OrderController extends Controller
         }
     }
 
+    public function getOrders(Request $request)
+    {
+        $offset = $request->input("page");
+        $limit = $request->input("limit");
+        if (is_numeric($offset) && is_numeric($limit)) {
+            $orders = Order::take($limit)
+                ->skip($offset)
+                ->select('id', 'distance', 'status')
+                ->get();
+            return response()->json($orders);
+        } else {
+            $response = array("error" => "Invalid request. Please verify input data.");
+            return response()->json($response, 500);
+        }
+    }
+
     private function validateLatLong($latLong)
     {
         if (preg_match('/^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/', $latLong[0]) && preg_match('/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/', $latLong[1])) {
