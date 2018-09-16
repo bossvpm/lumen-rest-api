@@ -16,3 +16,4 @@ $router->get('/', function () use ($router) {
 });
 
 $router->post('order', 'OrderController@placeOrder');
+$router->put('order/{id}', 'OrderController@takeOrder');

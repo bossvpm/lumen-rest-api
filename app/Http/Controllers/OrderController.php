@@ -48,6 +48,30 @@ class OrderController extends Controller
         }
     }
 
+    public function takeOrder(Request $request, $id)
+    {
+        $data = $request->json()->all();
+        if (is_numeric($id) && $data['status'] == 'taken') {
+            $order = Order::find($id);
+            if ($order->status != "taken") {
+                $order->status = "taken";
+                if ($order->save()) {
+                    $response = array("status" => "SUCCESS");
+                    return response()->json($response);
+                } else {
+                    $response = array("error" => "Unable to take order. Please try again later.");
+                    return response()->json($response, 500);
+                }
+            } else {
+                $response = array("error" => "ORDER_ALREADY_BEEN_TAKEN");
+                return response()->json($response, 409);
+            }
+        } else {
+            $response = array("error" => "Invalid request. Please verify input data.");
+            return response()->json($response, 500);
+        }
+    }
+
     private function validateLatLong($latLong)
     {
         if (preg_match('/^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$/', $latLong[0]) && preg_match('/^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$/', $latLong[1])) {
