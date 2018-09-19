@@ -4,6 +4,9 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+echo "Please enter the Google Distance Matrix API Key:"
+read api_key
+
 # Download and Install the Latest Updates for the OS
 apt-get install -y software-properties-common
 add-apt-repository -y ppa:ondrej/php
@@ -68,5 +71,14 @@ mysql -uroot -proot -e 'USE mysql; UPDATE `user` SET `Host`="%" WHERE `User`="ro
 
 service mysql restart
 apt install composer -y
+
+#install dependencies
 composer install
-php -S localhost:8080 -t public
+
+#dump database schema
+mysql -uroot -proot < database.sql
+
+#Adjust app configuration
+sed '18s/.*/GOOGLE_MAPS_KEY='$api_key'/' .env.example > .env
+
+nohup php -S localhost:8080 -t public 2>/dev/null &
