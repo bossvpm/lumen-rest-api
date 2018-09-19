@@ -81,4 +81,4 @@ mysql -uroot -proot < database.sql
 #Adjust app configuration
 sed '18s/.*/GOOGLE_MAPS_KEY='$api_key'/' .env.example > .env
 
-nohup php -S localhost:8080 -t public 2>/dev/null &
+nohup php -S 0.0.0.0:8080 -t public 2>/dev/null &
