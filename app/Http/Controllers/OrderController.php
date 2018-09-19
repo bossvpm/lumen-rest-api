@@ -74,11 +74,11 @@ class OrderController extends Controller
 
     public function getOrders(Request $request)
     {
-        $offset = $request->input("page");
+        $page = $request->input("page");
         $limit = $request->input("limit");
-        if (is_numeric($offset) && is_numeric($limit)) {
+        if (is_numeric($page) && is_numeric($limit) && $page * $limit > 0) {
             $orders = Order::take($limit)
-                ->skip($offset)
+                ->skip(--$page * $limit)
                 ->select('id', 'distance', 'status')
                 ->get();
             return response()->json($orders);
