@@ -23,8 +23,8 @@ class OrderController extends Controller
         if (!empty($data['origin']) && !empty($data['origin']) && $this->validateLatLong($data['origin']) && $this->validateLatLong($data['destination'])) {
 
             $order = new Order;
-            $order->origin = implode('|', $data['origin']);
-            $order->destination = implode('|', $data['destination']);
+            $order->origin = implode(',', $data['origin']);
+            $order->destination = implode(',', $data['destination']);
             $order->status = "UNASSIGN";
             $order->distance = "NA";
             $client = new \GuzzleHttp\Client();
