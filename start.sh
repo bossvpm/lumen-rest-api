@@ -82,3 +82,7 @@ mysql -uroot -proot < database.sql
 sed '18s/.*/GOOGLE_MAPS_KEY='$api_key'/' .env.example > .env
 
 nohup php -S 0.0.0.0:8080 -t public 2>/dev/null &
+
+echo "Application is listening on port 8080"
+
+exit 0
